@@ -13,15 +13,17 @@ pwm_period = 0.0
 HOST = ''                 # Symbolic name meaning all available interfaces
 PORT = 50007              # Arbitrary non-privileged port
 
+def pwm_stop():
+    os.system('sudo echo 0 > /sys/class/pwm/pwmchip0/pwm0/enable')
+
 def pwm_open():
     os.system('sudo echo 0 > /sys/class/pwm/pwmchip0/export')
+
+def pwm_polarity():
     os.system('sudo echo "normal" > /sys/class/pwm/pwmchip0/pwm0/polarity')
 
 def pwm_enable():
     os.system('sudo echo 1 > /sys/class/pwm/pwmchip0/pwm0/enable')
-
-def pwm_stop():
-    os.system('sudo echo 0 > /sys/class/pwm/pwmchip0/pwm0/enable')
 
 def pwm_close():
     os.system('sudo echo 0 > /sys/class/pwm/pwmchip0/unexport')
@@ -32,6 +34,7 @@ def pwm_freq(freq):
     os.system('sudo echo ' + str(int(pwm_period)) + ' > /sys/class/pwm/pwmchip0/pwm0/period')
 
 def pwm_duty(duty):
+    global pwm_period
     dutycycle = duty * int(pwm_period)
     os.system('sudo echo ' + str(int(dutycycle)) + ' > /sys/class/pwm/pwmchip0/pwm0/duty_cycle')
 
@@ -70,6 +73,7 @@ while inputs:
             pwm_open()
             pwm_freq(50)
             pwm_duty(0.05)              # min 0.05, max 0.15 180 degrees
+            pwm_polarity()
             pwm_enable()
 
             # Give the connection a queue for data we want to send

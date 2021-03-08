@@ -28,9 +28,7 @@ void pwm_open( void )
     FILE *fp;
     bool isdir;
     char path[100] = "";
-    char polarity[100] = "";
     strcpy( path, "/sys/class/pwm/pwmchip0/pwm0" );
-    strcpy( polarity, "/sys/class/pwm/pwmchip0/pwm0/polarity" );
     struct stat st = {0};
     if ( !stat(path, &st) ) {
         isdir = S_ISDIR( st.st_mode );
@@ -39,10 +37,15 @@ void pwm_open( void )
         fp = fopen( "/sys/class/pwm/pwmchip0/export", "w" );
         fprintf( fp, "%d", 0 );
         fclose( fp );
-        fp = fopen( polarity, "w" );
-        fputs( "normal", fp );
-        fclose( fp );
     }
+}
+
+void pwm_polarity( void )
+{
+    FILE *fp;
+    fp = fopen( "/sys/class/pwm/pwmchip0/pwm0/polarity", "w" );
+    fputs( "normal", fp );
+    fclose( fp );
 }
 
 void pwm_enable( void )
@@ -242,6 +245,7 @@ int main(int argc , char *argv[])
             pwm_open();
             pwm_period = pwm_freq( 50 );
             pwm_duty( 0.05, pwm_period );
+            pwm_polarity();
             pwm_enable();
             //msg = 1;    // for every new connection, just send one msg
         }

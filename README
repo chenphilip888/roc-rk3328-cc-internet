@@ -27,16 +27,17 @@ sudo umount /media/$USER/4a32442e-fd4d-436c-8a1f-ac8889967b3e
 eject sd card.
 Plugin the sd card to Firefly ROC-RK3328-CC board.
 Plugin ethernet cable to Firefly ROC-RK3328-CC board
-Connect ROC-RK3328-CC gpio Pin 36 to serial USB cable TX.
-Connect ROC-RK3328-CC gpio pin 38 to serial USB cable RX. 
-Connect ROC-RK3328-CC gpio pin 39 to serial USB cable ground. 
+Connect gpio Pin 36 to serial USB cable TX.
+Connect gpio pin 38 to serial USB cable RX. 
+Connect gpio pin 39 to serial USB cable ground. 
 Type "script ~/outputfile.txt" on PC.
 Plugin serial USB cable to PC.
 Type "sudo screen /dev/ttyUSB0 1500000" on PC.
 Power on Firefly ROC-RK3328-CC board.
-set user, password, locale and time zone.
 sudo dmesg -n 1
 sudo vi /etc/rc.local ( add sudo dmesg -n 1 ).
+sudo armbian-config
+set user, password, enable ssh, wifi, locale and time zone.
 date
 sudo ifconfig
 sudo shutdown -h now
@@ -44,7 +45,7 @@ Power off the Firefly ROC-RK3328-CC board.
 Unplug serial USB cable from PC.
 Type "exit" on PC.
 Power on Firefly ROC-RK3328-CC board.
-ssh firefly@192.168.86.xxx
+ssh user@192.168.86.xxx
 vi nosleep.sh ( add following line to disable sleep feature ).
 sudo systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target
 ./nosleep.sh
@@ -55,7 +56,7 @@ sudo apt-get update
 sudo apt-get upgrade
 sync
 sudo reboot
-sudo apt-get install python-dev python-pip python-setuptools python3-dev python3-pip python3-setuptools dnsutils apache2 vsftpd ftp build-essential git libssl-dev nmap net-tools libssl-dev dkms libncurses5-dev libncursesw5-dev python-smbus i2c-tools libgpiod-dev
+sudo apt-get install python-dev python-pip python-setuptools python3-dev python3-pip python3-setuptools dnsutils apache2 vsftpd ftp build-essential git libssl-dev nmap net-tools libssl-dev dkms libncurses5-dev libncursesw5-dev python-smbus i2c-tools
 sudo cat /proc/device-tree/pwm@ff1b0020/status  ( pwm 2 )
 sudo cat /proc/device-tree/i2c@ff160000/status  ( i2c-1 )
 sudo i2cdetect -y 1
